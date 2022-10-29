@@ -1,0 +1,58 @@
+<!DOCTYPE html5>
+<html>
+    <head>
+        <link rel="stylesheet" href="/style.css">
+    </head>
+    <body>
+    <div class="text-welcome">
+        <form class="form-main" acton="/menu/ChoiceTest/demoversion" method="post">
+            <div class="mmenu">
+            <button class="btn btn_mm margin-f" type="button" onclick="location='/vihod'">Выйти</button>
+            <button  class="btn btn_mm" type="button" onclick="locate()">Вернуться назад</button>
+            </div>
+            <div class="form-group PA-cont" id='gg'>
+                <p class="main-inf"><%= name_d %></p> 
+                <% for (let i = 0; i < Object.keys(json).length; i++) { %>
+                    <fieldset class="fieldset-style" id=<%= "Zadan"+i %> name=<%= "Zadan"+i %>>
+                        <p class="main-inf main-inf__half"> <%=json[i].name_q %></p>
+                        <div class="linebreak"> <p class="quest-txt"> <%=json[i].text_q %> </p></div>
+                        <div> Балл за ответ: <%=json[i].points %> из <%=json[i].point %></div>
+                        <% if (json[i].type_q=="text") { %>
+                        <div>
+                        <div>Правильный ответ: <%=json[i].right_q %> </div>
+                        <textarea class="txt-area" rows="5" cols="140" style="resize: none;" id=<%="right_q"+i %> name=<%="right_q"+i %> cols="80" rows="5" 
+                            placeholder="Правильный ответ" 
+                             value='<%= json[i].text_q %>' required><%=json[i].answer %></textarea>
+                        </div>
+                        <% } else { %>
+                        <div class="text1">Правильные ответы отмечены зеленым: </div>
+                        <% } for (let j = 0; j < json[i].variants.length; j++)  { if (json[i].type_q=="radio") { %>
+                        <div id=<%= i+"answ"+j %>>
+                        <label <% if (json[i].right_q.includes(json[i].variants[j])) {%>  style="color:green;" <% } %> >
+                        <input type="radio" name=<%="right_q"+i %> value=<%=json[i].variants[j] %> <% if (json[i].answer.includes(json[i].variants[j])) {%> checked <% } %>>
+                        <%=json[i].variants[j] %></label>
+                        </div>
+                        <% } %>
+                        <% if (json[i].type_q=="checkbox") { %>
+                        <div id=<%= i+"answ"+j %>>
+                        <label <% if (json[i].right_q.includes(json[i].variants[j])) {%> style="color:green;" <% } %> >
+                        <input type="checkbox" name=<%="right_q"+i %>  value=<%=json[i].variants[j] %> <% if (json[i].answer.includes(json[i].variants[j])) {%> checked <% } %>>
+                        <%=json[i].variants[j] %></label>
+                        </div>
+                        <% }; } %>
+                    </fieldset>
+                <% } %>
+                <div> Итого: <%= score[0].final_score %> баллов из <%= score[0].max_score %> (<%=  score[0].per_score %>%)</div>
+                <div> Оценка: <%= score[0].grade %>  </div>
+            </div>
+    </form>
+            
+    </div>
+</body>
+<script>
+    function locate() {
+            location='/menu/ChoiceTest?disc_id='+new URLSearchParams(window.location.search).get('disc_id')
+        }
+</script>
+</html>
+

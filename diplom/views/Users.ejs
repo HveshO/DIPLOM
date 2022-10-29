@@ -1,0 +1,401 @@
+<!DOCTYPE html5>
+<html>
+    <head>
+        <!-- <link rel="stylesheet" href="/vhod.css"> -->
+        <link rel="stylesheet" href="/style.css">
+    </head>
+    <body>
+        <!-- 1. запись в саму таблицу, изменить кнопку, добавить проверку  -->
+    <div class="registration-cssave">
+        <form class="form-main" acton="/menuprep/RedactStudents" method="post">
+            <div class="mmenu">
+            <!-- <button  type="button" onclick="return Prov('<%= type %>')"> Проверка</button>  -->
+            <button class="btn btn_mm" type="button" onclick="location='/vihod'">Выйти</button>
+            <button class="btn btn_mm margin-f" type="button" onclick="location='/menuadmin'">Вернуться в меню</button>
+            <button class="btn btn_mm" type="button" onclick="download();">Экспорт в файл .txt</button>
+            <!-- <button id='upload' class="btn" type="button" onclick="update();">Импорт данных из файла</button> -->
+            <input class="custom-file-input btn_inp btn_mm margin-f" id="inputfile" type="file" accept=".txt"  onclick="update('<%= type %>','<%= zagol %>');"/>
+            <!-- <input type="file" name="inputfile" id="inputfile"> -->
+            <!-- <div>Кнопка также отправляет выбранным пользователям логин и пароль на почту</div> -->
+            <button class="btn btn_mm " type="submit" onclick="return Prov('<%= type %>')">Сохранить/отправить</button> 
+            <button class="btn btn_mm margin-f" type="button" onclick="AddRow('<%=Object.keys(json[0]).length %>','<%= type %>');">Добавить строку</button>
+        </div>
+            <!-- <button class="btn" type="submit" onclick="return Prov()"> Отравить логин и пароль на почту выбранным пользователям</button>  -->
+            <div class="form-group PA-cont">
+                <% if (t!=undefined){ %>
+                    <div class="form-field warningtext form-field-invalid">
+                        <div class="error"> <%= t %></div>
+                    </div>
+                    <% } %>
+                <table class="tb_prev tr__border" id="preview">
+                    <tr><th><input type="checkbox" onchange="t()"></th>
+                    <% for(var i = 0; i < zagol.length; i++) { %>
+                    <th class="form-tb"><%= zagol[i] %></th>
+                    <% } %>
+                    </tr>
+                    <% for(var i = 0; i < json.length; i++) { %>
+                        <tr id="<%= i %>"><td><input type="checkbox" name="checkmain" value="<%= i %>"></td>
+                            <% for(var j = 0; j < Object.keys(json[i]).length; j++) { %>
+                                <% if (type[j]=='users_id') { %> 
+                                    <td>
+                                        <input name="<%= i %>" class="<%= type[j] %>"
+                                        minlength="1" value='<%= json[i][Object.keys(json[i])[j]] %>' type="number" min="0" max="1000000000000000000" required>
+                                        <!-- name='<%= json[i].users_id %>'  -->
+                                    </td>
+                                    <% }if (type[j]=='fio') { %>
+                                        <td>
+                                            <input name="<%= i %>" class="<%= type[j] %> form-tb fio-size"
+                                             value='<%= json[i][Object.keys(json[i])[j]] %>' autocomplete="off" size="30"
+                                             minlength="2" maxlength="50"  pattern="([A-Za-zА-Яа-яЁё]{2,}?([A-Za-zА-Яа-яЁё ]*$|$))" title="Английские или русские символы, пробелы, без цифр от 2 до 50" required>
+                                            <!-- name='<%= json[i].users_id %>'  -->
+                                        </td>
+                                    <% } if (type[j]=='login'||type[j]=='passwords') { %>
+                                        <td>
+                                            <input name="<%= i %>" class="<%= type[j] %> form-tb" type='text' autocomplete="off" 
+                                             value='<%= json[i][Object.keys(json[i])[j]] %>' size="10"
+                                             maxlength="30" minlength="4" pattern="^[a-zA-Z0-9_.-]*$" title="Английские символы и цифры_,.-" required>
+                                        </td>
+                                <% }if (type[j]=='email') { %> 
+                                        <td>
+                                            <input name="<%= i %>" class="<%= type[j] %> form-tb email-size" type="email"
+                                            value='<%= json[i][Object.keys(json[i])[j]] %>' autocomplete="off" size="25"   maxlength="50" minlength="4" required>
+                                            <!-- name='<%= json[i].users_id %>'  -->
+                                        </td>
+                                <%}if (type[j]=='numgroup') { %>
+                                            <td>
+                                                <input name="<%= i %>" class="<%= type[j] %> form-tb num-size" type='text'  minlength="1" 
+                                                value='<%= json[i][Object.keys(json[i])[j]] %>' size="10"  maxlength="50" autocomplete="off" pattern="^[A-Za-zА-Яа-яЁё0-9/ ]+$">
+                                            </td>
+                                <% } if (type[j]=='roles') { if (json[i][Object.keys(json[i])[j]]=='главный администратор'){ %>
+                                    <td>
+                                        <input name="<%= i %>" class="<%= type[j] %> form-tb fio-size"
+                                        minlength="1" value='<%= json[i][Object.keys(json[i])[j]] %>'
+                                        size="30" autocomplete="off" readonly="readonly" maxlength="50">
+                                        <!-- name='<%= json[i].users_id %>'  -->
+                                    </td> 
+                                    <%  }else {%>
+                                        <!-- pattern="(преподаватель?(,(студент)|,(администратор)|$))|(студент?(,(преподаватель)|,(администратор)|$))|(администратор?(,(студент)|,(преподаватель)|$))|(,)" -->
+                                    <td>
+                                        <input name="<%= i %>" class="<%= type[j] %> form-tb fio-size"
+                                        minlength="1" value='<%= json[i][Object.keys(json[i])[j]] %>' size="30"  maxlength="50" 
+                                        pattern="((преподаватель)?(,((студент)?(,(администратор)|$))|,((администратор)?(,(студент)|$))|$))|((студент)?(,((преподаватель)?(,(администратор)|$))|,((администратор)?(,(преподаватель)|$))|$))|((администратор)?(,((студент)?(,(преподаватель)|$))|,((преподаватель)?(,(студент)|$))|$))" 
+                                        title="студент,преподаватель,администратор"
+                                        autocomplete="off" required><!-- title="студент,преподаватель,администратор" -->
+                                        <!-- name='<%= json[i].users_id %>'  -->
+                                    </td>                                   
+                            <% }}} if (!Object.values(json[i])[4].includes("главный администратор")) { %>
+                            <td><button class="btn btn_del" style="white-space: nowrap;" type="button"  onclick="getElementById('<%= i %>').remove();">Удалить строку</button></td>
+                            <% } %>
+                        </tr>
+                        <% } %>
+                    </tr>
+                </table>
+            </div>
+    </form>
+</div>   
+    <script>
+function update(type,zagol) {
+// document.getElementById('inputfile').removeEventListener('change',t)
+document.getElementById('inputfile').addEventListener('change', function t() {
+			var fr = new FileReader();
+			fr.onload = function() {
+                var data=fr.result;
+				//  document.getElementById('output')
+				//  	.textContent = fr.result
+                console.log(data)
+                renderTable(data,type,zagol);
+
+			}
+        try{
+			fr.readAsText(this.files[0]);
+        }
+        catch {
+            console.log("Файл не был загружен")
+        }
+		})
+console.log(document.getElementById('inputfile'))
+    }
+function renderTable(data,type,zagol) {
+            const PREVIEW = document.querySelector('tbody');
+            var ga=false;
+            var gaa=false;
+            console.log(data)
+            data.replace(/\s+/g, ' ').trim();
+            console.log(type)
+            type=type.split(',')
+            zagol=zagol.split(',')
+            console.log(zagol)
+            PREVIEW.innerHTML = '';
+        data.split(/\r\n|\r|\n/)
+            .forEach(function(row, i) {
+                if (row=='') {delete data[i];}
+                else{
+                console.log(row.split(/;/).length, type.length,row.split(/;/).length==type.length)
+                if(row.split(/;/).length==type.length)
+                {console.log('Работает')
+                if (i==0){
+                    PREVIEW.insertAdjacentHTML('beforeend', `<tr><th><input type="checkbox" onchange="t()" ></th></tr>`)
+                }
+                else {
+                    PREVIEW.insertAdjacentHTML('beforeend', `<tr id="`+ (i-1)+`"><td><input type="checkbox" name="checkmain" value="`+i+`"></td></tr>`)
+                }
+            // Разделитель - точка с запятой.
+            // Перебираем полученный массив будущих ячеек.
+            console.log('weruhiewrh',row)
+            row.split(/;/).forEach(function(cell,j) {
+                console.log(i,cell,j,type[j])
+                if (i==0){
+                PREVIEW.lastChild.insertAdjacentHTML('beforeend', `<th class="form-tb">`+cell+`</th>`)
+                }
+                else{//value='`+cell+`'
+                if (type[j]=='users_id') {
+                    PREVIEW.lastChild.insertAdjacentHTML('beforeend', `<td><input name="`+ i+`" class="`+type[j]+`" minlength="1" value='`+cell+`'
+                         type="number" min="0" max="1000000000000000000" autocomplete="off" required></td>`);        
+                }
+        if (type[j]=='fio') {
+            PREVIEW.lastChild.insertAdjacentHTML('beforeend', `<td><input name="`+ i+`" class="`+type[j]+` form-tb fio-size" type='text'  value='`+cell+`'
+                         size="30" minlength="2" maxlength="50"  pattern="([A-Za-zА-Яа-яЁё]{2,}?([A-Za-zА-Яа-яЁё ]*$|$))" title="Английские или русские символы, пробелы от 2 до 50" autocomplete="off" required></td>`);      
+                }
+                if (type[j]=='login'||type[j]=='passwords') {
+                    PREVIEW.lastChild.insertAdjacentHTML('beforeend', `<td><input name="`+ i+`" class="`+type[j]+` form-tb" type='text'  value='`+cell+`'
+                        maxlength="30" minlength="4" pattern="^[a-zA-Z0-9_.-]*$" title="Английские символы и цифры,_.-" size="10" autocomplete="off" required></td>`); 
+                }
+                if (type[j]=='numgroup') {
+                    PREVIEW.lastChild.insertAdjacentHTML('beforeend', `<td><input name="`+ i+`" class="`+type[j]+` form-tb num-size" type='text'  value='`+cell+`'
+                        minlength="1" size="10"  maxlength="50" autocomplete="off"  pattern="^[A-Za-zА-Яа-яЁё0-9/ ]+$"></td>`);
+                }
+                if (type[j]=='email') {
+                    PREVIEW.lastChild.insertAdjacentHTML('beforeend', `<td><input name="`+ i+`" class="`+type[j]+` form-tb email-size" type='email'  value='`+cell+`'
+                         size="25"  autocomplete="off"  maxlength="50" minlength="4" required></td>`);
+                }
+                if (type[j]=='roles') { 
+                    console.log(cell)
+                    if (cell=="главный администратор" &&!gaa) {
+                        PREVIEW.lastChild.insertAdjacentHTML('beforeend', `<td><input name="`+ i+`" class="`+type[j]+` form-tb fio-size"  value='`+cell+`'
+                                        minlength="1" size="30" readonly="readonly" maxlength="50">
+                                    </td>`);  
+                        ga=true;     
+                    }
+                    else {
+                    PREVIEW.lastChild.insertAdjacentHTML('beforeend', `<td><input name="`+ i+`" class="`+type[j]+` form-tb fio-size"  value='`+cell+`'
+                        minlength="1" size="30"  maxlength="50" 
+                        pattern="((преподаватель)?(,((студент)?(,(администратор)|$))|,((администратор)?(,(студент)|$))|$))|((студент)?(,((преподаватель)?(,(администратор)|$))|,((администратор)?(,(преподаватель)|$))|$))|((администратор)?(,((студент)?(,(преподаватель)|$))|,((преподаватель)?(,(студент)|$))|$))" 
+                                        title="студент,преподаватель,администратор"
+                        autocomplete="off" required></td>`); 
+                }}
+            };});
+            if (i!=0){
+                if (ga&&!gaa) {
+                 gaa=true;   
+                }
+            else {
+                PREVIEW.lastChild.insertAdjacentHTML('beforeend', `<td><button class="btn btn_del" style="white-space: nowrap;" type="button" onclick="getElementById('`+  (i-1)+`').remove();">Удалить строку</button></td>`)  
+            }}
+        }
+    else {
+        if (i==0){
+        PREVIEW.insertAdjacentHTML('beforeend', `<tr><th><input type="checkbox" onchange="t()"></th>`)
+        for(var i = 0; i < zagol.length; i++) {
+            PREVIEW.lastChild.insertAdjacentHTML('beforeend', `<th class="form-tb">`+zagol[i]+`</th>`)
+            // PREVIEW.lastChild.setAttribute('class',"form-tb");
+            // console.log('PREVIEW.lastChild',PREVIEW.lastChild)
+        }}
+
+    }}});
+    console.log('ga',ga)
+    if (ga==false) {
+        r=data.split(/\r\n|\r|\n/).length
+        PREVIEW.insertAdjacentHTML('beforeend', `<tr id="`+r+`"><td><input type="checkbox" name="checkmain" value="`+r+`"></td>      
+                            <td>
+                                <input name="`+r+`" class="fio form-tb fio-size " size="30"  autocomplete="off" 
+                                minlength="2" maxlength="50"  pattern="([A-Za-zА-Яа-яЁё]{2,}?([A-Za-zА-Яа-яЁё ]*$|$))" title="Английские или русские символы, пробелы от 2 до 50" required>
+                            </td>
+                            <td>
+                                <input name="`+r+`" class="login form-tb" type='text' size="10"  autocomplete="off"
+                                maxlength="30" minlength="4" pattern="^[a-zA-Z0-9_.-]*$" title="Английские символы и цифры,_.-" required>
+                            </td>
+                            <td>
+                                <input name="`+r+`" class="passwords form-tb" type='text' size="10"  autocomplete="off"
+                                maxlength="30" minlength="4" pattern="^[a-zA-Z0-9_.-]*$" title="Английские символы и цифры,_.-" required>
+                            </td>
+                                <td>
+                                    <input name="`+r+`" class="numgroup form-tb num-size" type='text'  minlength="1" 
+                                    size="10"  maxlength="50" pattern="^[A-Za-zА-Яа-яЁё0-9/ ]+$" autocomplete="off">
+                                </td>
+                        <td>
+                            <input name="`+r+`"  class="roles form-tb fio-size"
+                                        minlength="1" value='главный администратор' size="30" readonly="readonly" maxlength="50" >
+                        </td>                                   
+                            <td>
+                                <input name="`+r+`" class="email form-tb email-size" type="email"
+                                  size="25"   maxlength="50" minlength="4" autocomplete="off" required>
+                            </td> </tr>`)
+    }
+        }
+function AddRow(json,type) {
+    type=type.split(',')
+    console.log(json)
+    console.log(type)
+    //    let d1 = document.getElementById("preview");
+    let d1 = document.querySelector("tbody");
+    let rowsl = document.getElementsByTagName("table")[0].rows.length;
+    let i= Number(document.getElementsByTagName("table")[0].rows[rowsl-1].id)+1;
+    while (document.getElementById(i) != null) {//проверка, что нет уже в списке такого задания с id
+        i+=1;
+    }
+    d1.insertAdjacentHTML('beforeend', `<tr id="`+ i+`"><td><input type="checkbox" name="checkmain" value="`+i+`"></td>`)
+    for(var j = 0; j < json; j++) {
+        if (type[j]=='users_id') {
+                    d1.lastChild.insertAdjacentHTML('beforeend', `<td><input name="`+ i+`" class="`+type[j]+`" minlength="1"
+                         type="number" min="0" max="1000000000000000000" autocomplete="off" required></td>`);        
+                }
+        if (type[j]=='fio') {
+                    d1.lastChild.insertAdjacentHTML('beforeend', `<td><input name="`+ i+`" class="`+type[j]+` form-tb fio-size" type='text'  minlength="1"
+                        minlength="2" maxlength="50"  pattern="([A-Za-zА-Яа-яЁё]{2,}?([A-Za-zА-Яа-яЁё ]*$|$))" title="Английские или русские символы, пробелы от 2 до 50" autocomplete="off" required></td>`);      
+                }
+                if (type[j]=='login'||type[j]=='passwords') {
+                    d1.lastChild.insertAdjacentHTML('beforeend', `<td><input name="`+ i+`" class="`+type[j]+` form-tb" type='text'  minlength="1"
+                         pattern="^[a-zA-Z0-9_.-]*" size="10"  maxlength="50" autocomplete="off" required></td>`); 
+                }
+                if (type[j]=='numgroup') {
+                    d1.lastChild.insertAdjacentHTML('beforeend', `<td><input name="`+ i+`" class="`+type[j]+` form-tb num-size" type='text'  
+                        minlength="1" size="10"  maxlength="50" autocomplete="off" pattern="^[A-Za-zА-Яа-яЁё0-9/ ]+$"></td>`);
+                }
+                if (type[j]=='email') {
+                    d1.lastChild.insertAdjacentHTML('beforeend', `<td><input name="`+ i+`" class="`+type[j]+` form-tb email-size" type='email'  
+                         size="25"   maxlength="50" minlength="4" autocomplete="off" required></td>`);
+                }
+                if (type[j]=='roles') {
+                    d1.lastChild.insertAdjacentHTML('beforeend', `<td><input name="`+ i+`" class="`+type[j]+` form-tb fio-size"
+                        pattern="((преподаватель)?(,((студент)?(,(администратор)|$))|,((администратор)?(,(студент)|$))|$))|((студент)?(,((преподаватель)?(,(администратор)|$))|,((администратор)?(,(преподаватель)|$))|$))|((администратор)?(,((студент)?(,(преподаватель)|$))|,((преподаватель)?(,(студент)|$))|$))" 
+                                        title="студент,преподаватель,администратор"
+                        minlength="1" size="30"  maxlength="50" autocomplete="off" required></td>`); 
+                }
+
+        };
+         d1.lastChild.insertAdjacentHTML('beforeend', `<td><button class="btn btn_del" style="white-space: nowrap;" type="button" onclick="getElementById('`+ i+`').remove();">Удалить строку</button></td></tr>`)
+        }
+function Prov (type) {
+    type=type.split(',')
+    console.log(type,'type')
+    var t=[false,false,false,false,false]
+    for (var r0 of type)
+    {
+        if (r0=='fio'||r0=='login'||r0=='email') {
+        var inp=document.querySelectorAll('.'+r0+'')
+        console.log('inp',inp)
+        var l=[]
+         for (var r1 of inp)
+         { console.log('r1',r1)
+         var rr1=r1.value.replace(/\s+/g, ' ').trim().toLowerCase();
+         if (l.includes(rr1))
+            {
+                console.log(t[0])
+                t[0]=true;
+                break;
+
+            }
+            l.push(rr1)
+         }
+        }
+        if (t[0]) {
+            break;
+        }
+        }
+        var rowsl = document.getElementsByTagName("table")[0].rows.length
+            console.log(rowsl)
+            var colsl = document.getElementsByTagName("table")[0].rows[0].cells.length
+            console.log(colsl);
+            for(let i = 1; i < rowsl; i++) {
+        //     var l1=[];
+        //     for (var r2 of type)
+        //     {
+        //     rr2=document.getElementsByTagName("table")[0].rows[i].querySelector('.'+r2+'').value.replace(/\s+/g, ' ').trim()
+        //     if (l1.includes(rr2))
+        //     {
+        //         t[1]=true;
+        //         break;
+
+        //     }
+        //     l1.push(rr2)
+        //     }
+        //     if (t[1]) {
+        //     break;
+        // }
+            numgroup=document.getElementsByTagName("table")[0].rows[i].querySelector('.numgroup').value.replace(/\s+/g, ' ').trim()
+            roles=document.getElementsByTagName("table")[0].rows[i].querySelector('.roles').value.replace(/\s+/g, ' ').trim().split(',')
+            if (new Set(roles).size !== roles.length)
+            {
+                t[4]=true
+                break;
+            }
+            //console.log('444444444444',login,passwords,numgroup,roles)
+            if (!roles.includes('студент')&&numgroup!=""&&(roles.includes('администратор')||roles.includes('преподаватель')))
+            {
+                console.log(!roles.includes('студент'),numgroup!="")
+                t[2]=true
+                break;
+            }
+            if (roles.includes('студент')&&numgroup=="")
+            {
+                t[3]=true
+                break;
+            }
+            }
+        if (t[0]) {
+            alert("Данные не могут повторяться: '"+rr1+"'")
+            return false;
+        }
+        // else if (t[1]) {
+        //     alert("Данные не могут повторяться: '"+rr2+"'")
+        //     return false;
+        // }
+        else if (t[2]) {
+            alert("Номер группы у администратора или преподавателя должен быть пустой: '"+numgroup+"'")
+            return false;
+        }
+        else if (t[3]) {
+            alert("У студента должен быть указан номер группы")
+            return false;
+        }else if (t[4]) {
+            alert("Роли не могут повторяться:'"+roles+"'")
+            return false;
+        }
+        else {
+            return true;
+        }
+        }
+function t(){
+            sel=document.querySelectorAll('input[type=checkbox]')
+            sel.forEach( r=> {
+                r.checked = sel[0].checked
+            })
+        }
+function download() {
+            var rowsl = document.getElementsByTagName("table")[0].rows.length
+            console.log(rowsl)
+            var colsl = document.getElementsByTagName("table")[0].rows[0].cells.length
+            console.log(colsl);
+            var r=[];
+            for(let i = 0; i < rowsl; i++) {
+                for(let j = 1; j < colsl; j++) {
+                    if (i==0){
+                    cell_value = document.getElementsByTagName("table")[0].rows[i].cells[j].textContent.replace(/\s+/g, ' ').trim()}
+                    else{
+                        cell_value=document.getElementsByTagName("table")[0].rows[i].cells[j].querySelector('input').value.replace(/\s+/g, ' ').trim()}
+                    console.log(cell_value)
+                    if (j!=colsl-1) {
+                    r+=cell_value + ';'}
+                    else {r+=cell_value + '\n'}
+
+                }
+            }
+            let a = document.createElement("a");
+            let file = new Blob([r], {type: 'text/txt; charset=windows-1251'});
+            a.href = URL.createObjectURL(file);
+            a.download = "example.txt";
+            a.click();
+        }
+</script>
+</body>
+</html>

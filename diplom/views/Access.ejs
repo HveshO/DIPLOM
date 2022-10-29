@@ -1,0 +1,51 @@
+<!DOCTYPE html5>
+<html>
+    <head>
+        <link rel="stylesheet" href="/style.css">
+    </head>
+    <body>
+    <div class="registration-cssave">
+        <form class="form-main" method="post">
+        <div class="mmenu">
+            <button class="btn btn_mm margin-f" type="button" onclick="location='/vihod'">Выйти</button>
+            <button class="btn btn_mm" type="submit"> Сохранить изменения</button>
+            <button class="btn btn_mm margin-f" type="button" onclick="locate()">Вернуться назад</button>
+        </div>
+        <div class="form-group PA-cont">
+            <p class="main-inf"><%= name_d %></p> 
+                <table class="tb_prev tr__border table-txt" id="preview">
+                    <tr><th><input type="checkbox" onchange="t()"></th>
+                    <% for(var i = 0; i < zagol.length; i++) { %>
+                    <th class="form-tb"><%= zagol[i] %></th>
+                    <% } %>
+                    </tr>
+                    <% if (json.length>0){ for(var i = 0; i < json.length; i++) { %>
+                        <tr id="<%= json[i][Object.keys(json[i])[0]] %>">
+                            <td><input type="checkbox" name="checkmain" value="<%= json[i][Object.keys(json[i])[0]] %>" 
+
+                                <% if (access !=null) {if (access.includes(json[i][Object.keys(json[i])[0]])) {%> checked <% }} %>></td>
+                            <% for(var j = 1; j < Object.keys(json[i]).length; j++) { %>
+                                <td>
+                                    <div class="linebreak"><%= json[i][Object.keys(json[i])[j]] %></div>
+                                    <!-- name='<%= json[i].users_id %>'  -->
+                                </td>     
+                            <% } %>
+                        </tr>
+                        <% }} %>
+                </table>
+            </div>
+    <br>
+    </div>
+    </form>
+    <script>
+function locate() {
+            location='/menuadmin/RedactDiscipline'
+        }
+        function t(){
+            sel=document.querySelectorAll('input[type=checkbox]')
+            sel.forEach( r=> {
+                r.checked = sel[0].checked})
+        }
+</script>
+</body>
+</html>

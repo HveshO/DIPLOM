@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+    <div class="wrapper">
+        <div class="container-welcome">
+            <% if (!choice_role) { %>
+            <p class="enter-txt">Вход в систему:</p>
+            <% } else {%>
+                <p class="choice">Выберите роль:</p>
+            <% } %>
+            <div class="form-field warningtext <%= errors.message ? 'form-field-invalid' : '' %>">
+                <% if (errors) { %>
+                  <div class="error"><%= errors.msg %></div>
+                <% } %> 
+              </div>
+              <div class="auto">
+                <form action="/" method="post">
+              <% if (choice_role) { %>
+                <% for (let i = 0; i < choice_role.roles.length; i++) { %>
+              
+                    <div class="cont__lable"><input type="radio" name=<%="roles"%> value='<%= choice_role.roles[i] %>' checked>
+                    <%= choice_role.roles[i] %>
+                </div>
+              <% } %>
+              <div class="choice__cont">
+                <button class="btn__ok" type="submit">Ок</button>
+            </div>
+              <% } else {%>
+                    <div class="login"> 
+                        <input class="form-p form-log inp" type="text" name="login" maxlength="30" minlength="4" pattern="^[a-zA-Z0-9_.-]*$" title="Английские символы и цифры,_.-" id="login" placeholder="Логин" autocomplete="off"
+                    required/>
+                </div>
+                   <div class="password">
+                        <input class="form-p form-pass inp" type="password" name="password"pattern="^[a-zA-Z0-9_.-]*$" minlength="4" maxlength="30" title="Английские символы и цифры,_.-" id="password" placeholder="Пароль" autocomplete="off" required>
+                   </div> 
+                    <div class="button">
+                        <button class="btn enter-account inp" type="submit">Вход</button>
+                    </div>
+                </form>
+                <div class="button">
+                    <button class="btn create-account inp" onclick="location='/regist'">Зарегистрироваться</button>
+                </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

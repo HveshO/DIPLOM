@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="/style.css">
+    </head>
+    <body>
+        <div class="registration-cssave">
+        <form class="personalArea-container" method="post">
+            <div class="mmenu">
+                <button class="btn btn_mm .myButton" onclick="location='/vihod'">Выйти</button>
+                <input class="btn btn_mm margin-f" type="button" onclick="locate()" value="Вернуться назад"/>
+                <button class="btn btn_mm" type="submit" onclick="return Prov()">Сменить логин и пароль</button>
+            </div>
+         <div class="PA-cont">
+            
+            <div class="form-group">
+                <p class="main-inf">Информация о пользователе:</p>
+                <!-- <input class="form-control item" type="text" name="username" maxlength="15" minlength="4" pattern="^[a-zA-Z0-9_.-]*$" id="username" placeholder="Логин" required> -->
+                <% for(var i = 0; i < zagol.length; i++) { %>
+                    <% if (Object.values(rows[0])[i]==null || Object.values(rows[0])[i]=="") { %>
+                    <div><%= zagol[i] %>: не определено</div>
+                    <% }else {%>
+                        <div><%= zagol[i] %>: <%= Object.values(rows[0])[i] %></div>
+                   <% }} %>
+            </div>
+            <div class="form-group PA-cont">
+                <p class="main-inf main-info__small"> Смена логина и пароля</p>
+                <% if (t!=undefined){ %>
+                    <div class="form-field form-field-invalid">
+                        <div class="error"> <%= t %></div>
+                    </div>
+                    <% } %>
+                <div> Укажите старый логин и пароль:</div>
+                <!-- <input class="form-control item" type="text" name="username" maxlength="15" minlength="4" pattern="^[a-zA-Z0-9_.-]*$" id="username" placeholder="Логин" required> -->
+                <input class="form-p form-control item" type="text" name="login" maxlength="30" minlength="4" pattern="^[a-zA-Z0-9_.-]*$" title="Английские символы и цифры,_.-" placeholder="Логин" autocomplete="off" required/>
+                <input class="form-p form-control item" type="password" name="password" pattern="^[a-zA-Z0-9_.-]*$" maxlength="30" minlength="4" title="Английские символы и цифры,_.-" placeholder="Пароль" autocomplete="off" required>
+                <div> Укажите новый логин и пароль:</div>
+                <input class="form-p form-control item" type="text" name="newlogin" maxlength="30" minlength="4" pattern="^[a-zA-Z0-9_.-]*$" title="Английские символы и цифры,_.-" placeholder="Логин" autocomplete="off" required/>
+                <input class="form-p form-control item" type="text" name="newpassword" placeholder="Пароль" pattern="^[a-zA-Z0-9_.-]*$" maxlength="30" minlength="4" title="Английские символы и цифры,_.-" autocomplete="off" required>
+                <div class="left-side"> </div>
+            </div>
+            <!-- <button  class="btn" type="button" onclick="location='/menu'">Вернуться в главное меню</button> -->
+        </div>
+        </form>
+        <br>
+    </div>
+</body>
+<script>
+function locate() {
+    var t=(document.location.href)
+    console.log(t)
+    if (t.includes('/menuprep/')){
+            location='/menuprep'
+        }
+    else {
+        location='/menu'
+    }}
+    function Prov () {
+        // var l=[]
+        // let t=false;
+        // var login=document.querySelector('input[name="login"]').value
+        // var password=document.querySelector('input[name="password"]').value
+        // var newlogin=document.querySelector('input[name="newlogin"]').value
+        // var newpassword=document.querySelector('input[name="newpassword"]').value
+        // console.log(login)
+        // if (login==password||newlogin==newpassword)
+        // {
+        //     alert("Логин и пароль не могут совпадать")
+        //     return false}
+        // else {
+        //     return true
+        // }
+        }
+</script>
+</html>

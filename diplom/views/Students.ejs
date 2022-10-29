@@ -1,0 +1,257 @@
+<!DOCTYPE html5>
+<html>
+    <head>
+        <link rel="stylesheet" href="/style.css">
+    </head>
+    <body>
+        <!-- 1. запись в саму таблицу, изменить кнопку, добавить проверку  -->
+    <div class="registration-cssave">
+        
+        <form class="form-main" acton="/menuprep/RedactStudents" method="post">
+         <div class="mmenu">
+            <button  class="btn btn_mm" type="button" onclick="download();">Экспорт в файл .txt</button>
+            <!-- <button id='upload' class="btn" type="button" onclick="update();">Импорт данных из файла</button> -->
+            <input id="inputfile" type="file" class="custom-file-input btn_inp btn_mm margin-f" accept=".txt" onclick="update('<%= type %>','<%= zagol %>');"/>
+            <!-- <input type="file" name="inputfile" id="inputfile"> -->
+            <button class="btn btn_mm" type="submit" onclick="return Prov()"> Сохранить/отправить</button>
+                <button class="btn btn_mm margin-f" type="button" onclick="AddRow('<%=zagol.length %>','<%= type %>');">Добавить строку</button>
+                
+            <button  class="btn btn_mm" type="button" onclick="locate()">Вернуться назад</button>
+            
+            <button class="btn btn_mm margin-f" type="button" onclick="location='/vihod'">Выйти</button>
+        </div>
+            <div class="form-group PA-cont">
+                <p class="main-inf"><%= name_disc %></p> 
+                <% if (t!=undefined){ %>
+                    <div class="form-field form-field-invalid ">
+                        <div class="error"> <%= t %></div>
+                    </div>
+                    <% } %>
+                <table class="tb_prev tr__border" id="preview">
+                    <tr><th><input type="checkbox" onchange="t()"></th>
+                    <% for(var i = 0; i < zagol.length; i++) { %>
+                        <!-- <th class="form-tb"><%= zagol[i] %></th> -->
+                    <th class="form-tb"><%= zagol[i] %></th>
+                    <% } %>
+                    </tr>
+                    
+                    <% if (json.length>0){ for(var i = 0; i < json.length; i++) { %>
+                        <tr id="<%= i %>">
+                            <td><input type="checkbox" name="checkmain" value="<%= i %>"></td>
+                            <% for(var j = 0; j < Object.keys(json[i]).length; j++) { %>
+                                <% if (type[j]=='fio') { %>
+                                    <td>
+                                        <input name="<%= i %>" class="<%= type[j] %> form-tb fio-size" type='text' value='<%= json[i][Object.keys(json[i])[j]] %>' autocomplete="off" size="30"  
+                                        minlength="2" maxlength="50"  pattern="([A-Za-zА-Яа-яЁё]{2,}?([A-Za-zА-Яа-яЁё ]*$|$))" title="Английские или русские символы, пробелы, без цифр от 2 до 50" required>
+                                    </td>
+                                <%}if (type[j]=='numgroup') { %>
+                                    <td>
+                                        <input name="<%= i %>" class="<%= type[j] %> form-tb num-size" type='text'   value='<%= json[i][Object.keys(json[i])[j]] %>' 
+                                        autocomplete="off" size="30"  minlength="1" maxlength="50" 
+                                        pattern="([A-Za-zА-Яа-яЁё0-9/]{1,}?([A-Za-zА-Яа-яЁё0-9/ ]*$|$))" title="Английские или русские символы,цифры,/ пробелы от 1 до 50" required>
+                                    </td>
+                                <%}if (type[j]=='email') { %>
+                                    <td>
+                                        <input name="<%= i %>" class="<%= type[j] %> form-tb email-size" type='email'
+                                        maxlength="50" minlength="4" value='<%= json[i][Object.keys(json[i])[j]] %>' autocomplete="off" size="30" required>
+                                    </td>
+                                    
+                            <% }} %>
+                            <td><button class="btn btn_del" type="button" style="white-space: nowrap;" onclick="getElementById('<%= i %>').remove();">Удалить строку</button></td>
+                        </tr>
+                        <% }} %>
+                    </tr>
+                </table>
+            </div>
+    <br>
+    </div>
+    </form>
+    <script>
+        function locate() {
+            location='/menuprep/DisciplineMenu?disc_id='+new URLSearchParams(window.location.search).get('disc_id')
+        }
+function update(type,zagol) {
+// document.getElementById('inputfile').removeEventListener('change',t)
+document.getElementById('inputfile').addEventListener('change', function t() {
+			var fr = new FileReader();
+			fr.onload = function() {
+                var data=fr.result;
+				//  document.getElementById('output')
+				//  	.textContent = fr.result
+                console.log(data)
+                renderTable(data,type,zagol);
+
+			}
+        try{
+			fr.readAsText(this.files[0]);
+        }
+        catch {
+            console.log("Файл не был загружен")
+        }
+		})
+console.log(document.getElementById('inputfile'))
+    }
+function renderTable(data,type,zagol) {
+            const PREVIEW = document.querySelector('tbody');
+            console.log(data)
+            data.replace(/\s+/g, ' ').trim();
+            console.log(type)
+            type=type.split(',')
+            zagol=zagol.split(',')
+            console.log(zagol)
+            PREVIEW.innerHTML = '';
+        data.split(/\r\n|\r|\n/)
+            .forEach(function(row, i) {
+                if (row=='') {delete data[i];}
+                else{
+                console.log(row.split(/;/).length, type.length,row.split(/;/).length==type.length)
+                if(row.split(/;/).length==type.length)
+                {console.log('Работает')
+                if (i==0){
+                    PREVIEW.insertAdjacentHTML('beforeend', `<tr><th><input type="checkbox" onchange="t()" ></th></tr>`)
+                }
+                else {
+                    PREVIEW.insertAdjacentHTML('beforeend', `<tr id="`+ (i-1)+`"><td><input type="checkbox" name="checkmain" value="<%= i %>"></td></tr>`)
+                }
+            // Разделитель - точка с запятой.
+            // Перебираем полученный массив будущих ячеек.
+            console.log('weruhiewrh',row)
+            row.split(/;/).forEach(function(cell,j) {
+                console.log(i,cell,j,type[j])
+                if (i==0){
+                PREVIEW.lastChild.insertAdjacentHTML('beforeend', `<th class="form-tb">`+cell+`</th>`)
+                }
+                else{
+                    if (type[j]=='fio') {
+                    PREVIEW.lastChild.insertAdjacentHTML('beforeend', `<td><input name="`+ i+`" class="`+type[j]+` form-tb fio-size" type='text'  
+                         value='`+cell+`' autocomplete="off" size="30"  
+                         minlength="2" maxlength="50"  pattern="([A-Za-zА-Яа-яЁё]{2,}?([A-Za-zА-Яа-яЁё ]*$|$))" title="Английские или русские символы, пробелы от 2 до 50" required></td>`);
+                        //PREVIEW.lastChild.lastChild.querySelector('input').setAttribute('pattern',"^[A-Za-zА-Яа-яЁё\s]+$")
+                }
+                if (type[j]=='numgroup') {
+                    PREVIEW.lastChild.insertAdjacentHTML('beforeend', `<td><input name="`+ i+`" class="`+type[j]+` form-tb num-size" type='text'  
+                         value='`+cell+`' autocomplete="off" size="30"  minlength="1" maxlength="50" 
+                         pattern="([A-Za-zА-Яа-яЁё0-9/]{1,}?([A-Za-zА-Яа-яЁё0-9/ ]*$|$))" title="Английские или русские символы,цифры,/ пробелы от 1 до 50" required></td>`);
+                }
+                if (type[j]=='email') {
+                    PREVIEW.lastChild.insertAdjacentHTML('beforeend', `<td><input name="`+ i+`" class="`+type[j]+` form-tb email-size" 
+                        type='email' value='`+cell+`' autocomplete="off"  maxlength="50" minlength="4" size="30" required></td>`);
+                }
+            };});
+            if (i!=0){
+                PREVIEW.lastChild.insertAdjacentHTML('beforeend', `<td><button type="button" class="btn btn_del" style="white-space: nowrap;" onclick="getElementById('`+  (i-1)+`').remove();">Удалить строку</button></td>`)
+                }
+        }
+    else { if (i==0){
+        PREVIEW.insertAdjacentHTML('beforeend', `<tr><th><input type="checkbox" onchange="t()"></th>`)
+        for(var i = 0; i < zagol.length; i++) {
+            PREVIEW.lastChild.insertAdjacentHTML('beforeend', `<th class="form-tb">`+zagol[i]+`</th>`)
+        }}
+
+    }}});
+        }
+function AddRow(json,type) {
+    type=type.split(',')
+    console.log(json)
+    console.log(type)
+    //    let d1 = document.getElementById("preview");
+    let d1 = document.querySelector("tbody");
+    let rowsl = document.getElementsByTagName("table")[0].rows.length;
+    let i= Number(document.getElementsByTagName("table")[0].rows[rowsl-1].id)+1;
+    console.log(i)
+    while (document.getElementById(i) != null) {//проверка, что нет уже в списке такого задания с id
+        i+=1;
+    }console.log(i)
+    d1.insertAdjacentHTML('beforeend', `<tr id="`+ i+`"><td><input type="checkbox" name="checkmain" value="`+i+`"></td>`)
+    for(var j = 0; j < json; j++) {
+        if (type[j]=='fio') {
+                    d1.lastChild.insertAdjacentHTML('beforeend', `<td><input name="`+ i+`" class="`+type[j]+` form-tb fio-size" type='text'  minlength="1"
+                         size="30" autocomplete="off" 
+                         minlength="2" maxlength="50"  pattern="([A-Za-zА-Яа-яЁё]{2,}?([A-Za-zА-Яа-яЁё ]*$|$))" title="Английские или русские символы, пробелы от 2 до 50" required></td>`);
+                         
+                }
+                if (type[j]=='numgroup') {
+                    d1.lastChild.insertAdjacentHTML('beforeend', `<td><input name="`+ i+`" class="`+type[j]+` form-tb num-size" type='text'  
+                         size="30" autocomplete="off" minlength="1" maxlength="50" 
+                         pattern="([A-Za-zА-Яа-яЁё0-9/]{1,}?([A-Za-zА-Яа-яЁё0-9/ ]*$|$))" title="Английские или русские символы,цифры,/ пробелы от 1 до 50" required></td>`);
+                }
+                if (type[j]=='email') {
+                    d1.lastChild.insertAdjacentHTML('beforeend', `<td><input name="`+ i+`" class="`+type[j]+` form-tb email-size" type='email'  
+                         size="30"  autocomplete="off"  maxlength="50" minlength="4" required></td>`);
+                }
+        };
+         d1.lastChild.insertAdjacentHTML('beforeend', `<td><button class="btn btn_del" type="button" style="white-space: nowrap;" onclick="getElementById('`+ i+`').remove();">Удалить строку</button></td></tr>`)
+        }
+function Prov () {
+        var is=document.querySelectorAll('input')
+        console.log(is)
+        console.log(is[0])
+        //matched = is.filter( el => two.indexOf( el.innerHTML ) > -1 );
+        var l=[]
+        var t=false;
+        var tt=false
+        is.forEach( r=> {  
+            if (r.type!="file" && r.type!='checkbox')
+            r=r.value.replace(/\s+/g, ' ').trim().toLowerCase();
+            console.log(r)
+            if (r=='' || r==' ')
+            {
+                tt=true;
+            }
+    })
+        is.forEach( r=> { 
+            //console.log(r.value)
+            if (r.classList[0]!="numgroup"&&r.type!="file" && r.type!='checkbox'){
+                r=r.value.replace(/\s+/g, ' ').trim().toLowerCase();
+                if (l.includes(r))
+                {
+                    t=true;
+                    
+                }
+                l.push(r)
+            //console.log(r.value)
+        }
+        })
+        if (t) {
+            alert('Данные не могут повторяться')
+            return false;
+        }
+        if (tt) {
+            alert('Данные не могут состоять из пробелов')
+            return false;
+        }
+        else {
+            return true;}}
+function t(){
+            sel=document.querySelectorAll('input[type=checkbox]')
+            sel.forEach( r=> {
+                r.checked = sel[0].checked})
+        }
+function download() {
+            var rowsl = document.getElementsByTagName("table")[0].rows.length
+            console.log(rowsl)
+            var colsl = document.getElementsByTagName("table")[0].rows[0].cells.length
+            console.log(colsl);
+            var r=[];
+            for(let i = 0; i < rowsl; i++) {
+                for(let j = 1; j < colsl; j++) {
+                    if (i==0){
+                    cell_value = document.getElementsByTagName("table")[0].rows[i].cells[j].textContent.replace(/\s+/g, ' ').trim()}
+                    else{
+                        cell_value=document.getElementsByTagName("table")[0].rows[i].cells[j].querySelector('input').value.replace(/\s+/g, ' ').trim()}
+                    console.log(cell_value)
+                    if (j!=colsl-1) {
+                    r+=cell_value + ';'}
+                    else {r+=cell_value + '\n'}
+
+                }
+            }
+            let a = document.createElement("a");
+            let file = new Blob([r], {type: 'text/txt; charset=windows-1251'});
+            a.href = URL.createObjectURL(file);
+            a.download = "example.txt";
+            a.click();
+        }
+</script>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="./style.css">
+    </head>
+    <body>
+    <div class="container-welcome margin-fix">
+
+        <form action="/regist" method="post">
+            <button class="btn" type="button" onclick="location='/vihod'">Выйти</button>
+            <p class="enter-txt">регистрация: </p>
+            <% if (msg!='Номера групп отсутствуют, регистрация невозможна') { %>
+                <% if (msg!='') { %>
+                    <div class="form-field warningtext">
+                  <div class="error"><%= msg %></div>
+              </div> <% } %>
+              <div class="form-gruop__contaner">
+            <div class="form-group">
+                <input class="form-p inp" type="ФИО:" name="fio" id="fio" placeholder="ФИО" minlength="2" maxlength="50"  pattern="([A-Za-zА-Яа-яЁё]{2,}?([A-Za-zА-Яа-яЁё ]*$|$))" title="Английские или русские символы, пробелы, без цифр от 2 до 50" autocomplete="off" required>
+            </div>
+            <div class="form-group">
+                <div class="sel-gr"> <p class="numb-gr"> номер группы:</p>
+                <select id= 0 name="numgroup">
+                    <% for (let i = 0; i < json.length; i++) { %>
+                    <option value=<%= json[i].numgroup %>> <%= json[i].numgroup %> </option>
+                    <%  } %>
+                </select>
+                <br>
+                <br>
+            </div>
+            </div>
+            <div class="form-group">
+                <input class="form-p inp" type="text" name="login" maxlength="30" minlength="4" pattern="^[a-zA-Z0-9_.-]*$" title="Английские символы и цифры,_.-" id="username" placeholder="Логин" autocomplete="off" required/>
+            </div>
+            <div class="form-group">
+                <input class="form-p inp" type="password" name="password" pattern="^[a-zA-Z0-9_.-]*$" minlength="4" maxlength="30" title="Английские символы и цифры,_.-" placeholder="Пароль" autocomplete="off" required>
+            </div>
+            <div class="form-group">
+                <input class="form-p inp" type="email" name="email" maxlength="50" minlength="4" placeholder="email" autocomplete="off" required/>
+            </div>
+            <div class="form-group">
+                <button class="btn-reg btn" type="submit" onclick="return Prov()">Зарегистрироваться</button>
+            </div>
+        </div>
+        <% }else { %>
+            <div class="form-field warningtext">
+                <div class="error"><%= msg %></div>
+                <% } %>
+        </form>
+    </div>
+</body>
+<script>
+    function Prov () {
+        // var l=[]
+        // let t=false;
+        // var is=document.querySelectorAll('input')
+        // for (var r of is){
+        //     var n=r.value.replace(/\s+/g, ' ').trim().toLowerCase();
+        //     if (n==''){
+        //         alert("Неверный ввод данных: '"+n+"'")
+        //         t=true
+        //         break;
+        //     }
+        //         if (l.includes(n))
+        //         {
+        //             alert("Данные не могут повторяться: '"+n+"'")
+        //             t=true
+        //             break;
+        //         }
+        //         l.push(n)
+            
+        // }
+        // if (t==true)
+        // {return false}
+        // else {
+        //     return true
+        // }
+        }
+</script>
+</html>

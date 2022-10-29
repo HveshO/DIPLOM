@@ -1,0 +1,26 @@
+<!DOCTYPE html5>
+<html>
+    <head>
+        <link rel="stylesheet" href="/style.css">
+    </head>
+    <body>
+    <div class="container-welcome admin">
+        <form class="form-main">
+        <div class="mmenu">
+        <button class="btn btn_mm" type="button" onclick="location='/vihod'">Выйти</button>
+        <!-- <form action="menuadmin/RedactUsers"  method="get"> -->
+            <button  class="btn btn_mm margin-f" onclick='locate()'>Данные всех пользователей</button>
+            <button class="btn btn_mm" type="button" onclick='location="menuadmin/RedactDiscipline"'>Редактировать дисциплины</button>
+    </div>
+</form>
+</div>
+    <script>
+        function locate () {
+            var anchor = document.createElement('a');
+            anchor.href = '/menuadmin/RedactUsers';
+            anchor.target="_blank";
+            anchor.click();
+        }
+    </script>
+    </body>
+</html>

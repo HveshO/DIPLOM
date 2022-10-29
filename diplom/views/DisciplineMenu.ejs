@@ -1,0 +1,83 @@
+<!DOCTYPE html5>
+<html>
+    <head>
+        <link rel="stylesheet" href="/style.css">
+    </head>
+    <body>
+    <div class="registration-cssave">
+            <div class="form-group form-main">
+             <div class="mmenu">
+                <button  class="btn btn_mm" formtarget="_blank" 
+                onclick="choice0('<%= disc_id %>')">Результаты прохождения теста</button>
+                <button  class="btn btn_mm margin-f" formtarget="_blank" onclick="location='/menuprep/DisciplineMenu/RedactStudents?disc_id=<%= disc_id %>'">Данные студентов</button>
+                <button  class="btn btn_mm" formtarget="_blank" onclick="choice1('<%= disc_id %>')">Итоговые баллы за тест и оценки</button>
+                <button  class="btn btn_mm margin-f" formtarget="_blank" onclick="choice2('<%= disc_id %>')">Система баллов</button>
+                <button  class="btn btn_mm" formtarget="_blank" 
+                onclick="choice3('<%= disc_id %>')">Изменить тест</button>
+                
+                
+                <button class="btn btn_mm margin-f" type="button" onclick="location='/menuprep'">Вернуться в главное меню</button>
+                <button class="btn btn_mm" type="button" onclick="location='/vihod'">Выйти</button>
+            </div>
+             <div class="form-group tb_prev tb_prev__padding">
+                <p class="main-inf"><%= name_disc %></p>
+                <div>Выберите тип теста:</div>
+                <div>
+                    <input type="radio" name='test' value='demo'>
+                    Пробный тест </div>
+                    <div>
+                        <input type="radio" name='test' value='ekz' checked>
+                        Экзаменационный тест </div>
+                <% if (json.length>0){ %>        
+                <div>Номер группы:</div>
+                    <% for(var i = 0; i < json.length; i++) { %>
+                        <div>
+                            <input type="radio" name='numgroup' value='<%=json[i][Object.keys(json[i])[0]] %>' checked>
+                            <%= json[i][Object.keys(json[i])[0]] %>
+                    </div>
+                <% } }%>
+            </div> 
+        </div>          
+            <br>
+        </div>
+    <script>
+console.log(document.getElementsByName('test'))
+function tete() {
+const tests=document.querySelectorAll('input[name="test"]')
+for (let f of tests)
+{if (f.checked){
+    var test=f.value;
+}}
+const numgroups=document.querySelectorAll('input[name="numgroup"]')
+for (let f of numgroups)
+{if (f.checked){
+    var numgroup=f.value;
+}}
+return [test,numgroup]}
+function choice1(disc_id){
+    var test=tete()[0]
+    var numgroup=tete()[1]
+    location='/menuprep/DisciplineMenu/finalscore?disc_id='+disc_id+'&test='+test+'&numgroup='+numgroup;
+    
+}
+function choice0(disc_id){
+    var test=tete()[0]
+    var numgroup=tete()[1]
+    location='/menuprep/DisciplineMenu/passage?disc_id='+disc_id+'&test='+test+'&numgroup='+numgroup;
+    
+}
+function choice2(disc_id){
+    var test=tete()[0]
+    var numgroup=tete()[1]
+    location='/menuprep/DisciplineMenu/systempoint?disc_id='+disc_id+'&test='+test;
+    
+}
+function choice3(disc_id){
+    var test=tete()[0]
+    var numgroup=tete()[1]
+    location='/menuprep/DisciplineMenu/RedactTest?disc_id='+disc_id+'&test='+test;
+    
+}
+    </script>
+    </body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html5>
+<html>
+    <head>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <style>
+        .linebreak{
+             /* word-break: break-word;   */
+            white-space: pre-line;
+}
+    </style>
+    <body>
+    <div class="registration-cssave">
+       
+        
+        <form class="form-main" method="post">
+            <div class="mmenu">
+                <button class="btn btn_mm" type="button" onclick="location='/menuprep/PersonalArea'">Личный кабинет</button>
+                <% if (json.length>0) {%>
+                <button class="btn btn_mm margin-f" type="submit"> Сохранить изменения</button>
+                <% } %>
+                <button class="btn btn_mm .myButton"  type="button" onclick="location='/vihod'">Выйти</button>
+                
+            </div>
+            <% if (json.length>0) {%>
+                <table class="tb_prev" id="preview">
+                    <tr>
+                    <% for(var i = 0; i < zagol.length; i++) { %>
+                    <th class="padding__add linebreak"><%= zagol[i] %></th>
+                    <% } %>
+                    </tr>
+                    <% for(var i = 0; i < json.length; i++) { %>
+                        <tr id="<%= i %>">
+                            <td>
+                                <button name="<%= json[i][Object.keys(json[i])[1]] %>"  class="btn" type="button"
+                                    onclick="location='/menuprep/DisciplineMenu?disc_id=<%= json[i][Object.keys(json[i])[0]] %>'"><%= json[i][Object.keys(json[i])[1]] %></button>
+                                </td>
+                                <td class="text-aling__center">
+                                <input name="<%= json[i][Object.keys(json[i])[1]] %>" value='<%= json[i][Object.keys(json[i])[2]] %>' type="number" min="0" max="900" autocomplete="off" required>
+                            </td>
+                            <td class="text-aling__center">
+                                <input name="<%= json[i][Object.keys(json[i])[1]] %>" value='<%= json[i][Object.keys(json[i])[3]] %>'  type="number" min="0" max="900" autocomplete="off" required>
+                                <!-- name='<%= json[i].users_id %>'  -->
+                            </td>
+                        </tr>
+                        <% }} %>
+                    </tr>
+                </table>
+        </form>
+        <br>
+    </div>
+    <script>
+
+    </script>
+    </body>
+</html>

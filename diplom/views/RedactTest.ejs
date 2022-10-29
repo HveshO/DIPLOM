@@ -1,0 +1,222 @@
+<!DOCTYPE html5>
+<html>
+    <head>
+        <link rel="stylesheet" href="/style.css">
+    </head>
+    <body>
+
+    <div class="redact__wrapper">
+        <form class="redact-test" acton="/menuadmin/RedactDiscipline/choicetest/RedactTest" method="post">
+            <div class="welcome"><h2 class="h-style"> <%= name_d %></h2></div>
+            <button class="btn btn_mm btn_test" type="button" onclick="location='/vihod'">Выйти</button>
+            <button  class="btn btn_mm btn_test" type="button" onclick="locate()">Вернуться назад</button>
+            <div id='gg'>
+                <% for (let r = 0; r < Object.keys(json).length; r++) { %>
+                    <% var i=json[r].table_id%>
+                    <fieldset class="fieldset-style" id=<%= "Zadan"+i %> name=<%= "Zadan"+i %>>
+                        <div class="name-zad"><p> Название задания: </p>
+                        <input class="form-p form-log inp-redact inp-name" id=<%="name_q"+i %> name=<%="name_q"+i %> placeholder="Название задания" minlength="1" value='<%=json[r].name_q %>' autocomplete="off">
+                        </div>
+                        <div> Текст задания:</div>
+                        <textarea class="txt-area" rows="15" cols="90" style="resize: none;" id=<%="text_q"+i%> name=<%="text_q"+i %> 
+                            placeholder="Текст задания" minlength="1" value='<%=json[r].text_q %>' required><%=json[r].text_q %></textarea>
+                        <div class="str"> 
+                            <p class="boll"> Балл за ответ:</p> 
+                            <input class="form-p form-log inp-redact inp-ball" id=<%="point"+i %> name=<%="point"+i %> placeholder="Балл" pattern="^[1-9]" value='<%=json[r].point %>' autocomplete="off" required>
+                            <select class="select-style margin-right" id=<%= i %> name=<%="type_q"+i %> onchange="selectvar(<%=i%>);">
+                            <option value="text" <% if (json[r].type_q=="text") { %> selected <% } %> >Текстовая форма ответа</option>
+                            <option value="radio" <% if (json[r].type_q=="radio") { %> selected <% } %> >Выбор одного ответа</option>
+                            <option value="checkbox" <% if (json[r].type_q=="checkbox") { %> selected <% } %> >Выбор нескольких ответов</option>
+                            </select>
+                        </div>  
+                        <block id=<%="block"+i %>>
+                        <% if (json[r].type_q=="text") { %>
+                            <div> Введите правильный ответ: </div>
+                        <div>
+                        <textarea class="txt-area" rows="6" cols="90" style="resize: none;" id=<%="right_q"+i %> name=<%="right_q"+i %> cols="80" rows="5" 
+                            placeholder="Правильный ответ" 
+                             value='<%= json[r].text_q %>' required><%=json[r].right_q %></textarea>
+                        </div>
+                            <% } else { %>
+                        <div class="str">  
+                            <p class="mar-top"> Правильный ответ надо отметить: </p>
+                            <button id=<%= "add_var"+i %> class="btn btn_var" type="button" onclick="add_var('<%= i %>');">Добавить вариант ответа</button>
+                        </div>  
+                        <% } for (let j = 0; j < json[r].variants.length; j++)  { if (json[r].type_q=="radio") { %>
+                        <div id=<%= i+"answ"+j %>>
+                        <input type="radio" name=<%="right_q"+i %> autocomplete="off" value='<%=json[r].variants[j] %>' <% if (json[r].right_q.includes(json[r].variants[j])) {%> checked <% } %>>
+                        <input class="form-p form-log inp-redact inp-otv" name=<%="variants"+i %> value='<%=json[r].variants[j] %>' autocomplete="off" placeholder="Текст варианта ответа">
+                        <button class="btn btn_redact-del" type="button" onclick="getElementById('<%=i%>answ<%=j%>').remove()">Удалить</button>
+                        </div>
+                        <% } %>
+                        <% if (json[r].type_q=="checkbox") { %>
+                        <div id=<%= i+"answ"+j %>>
+                        <input type="checkbox" name=<%="right_q"+i %>  value='<%=json[r].variants[j] %>' autocomplete="off" <% if (json[r].right_q.includes(json[r].variants[j])) {%> checked <% } %>>
+                        <input class="form-p form-log inp-redact inp-otv" name=<%="variants"+i %> value='<%= json[r].variants[j] %>' autocomplete="off" placeholder="Текст варианта ответа">
+                        <button class="btn btn_redact-del" type="button" onclick="getElementById('<%=i%>answ<%=j%>').remove()">Удалить</button>
+                        </div>
+                        <% }; } %>
+                        </block>
+                        <button class="btn btn_redact-del" type="button" onclick="getElementById('Zadan<%= i %>').remove()">Удалить задание</button>
+                    </fieldset>
+                <% } %>
+            </div>
+            <button id='btn' class="btn btn_mm btn_test" type="button" onclick="addZadan();">Добавить задание</button> 
+            <!--type="submit"-->
+            <button type="submit" class="btn btn_mm btn_test" onclick="return Prov()">Сохранить изменения</button>
+        </form>
+    </div>
+<script>
+    function selectvar (i) {
+        var sel=document.getElementById(i);
+    let divgg =document.getElementById('block'+i);
+    divgg.innerHTML = "";
+    if (sel.value=="text"){
+        divgg.insertAdjacentHTML('beforeend',`<div>Введите правильный ответ:</div>
+                        <div>
+                        <textarea class="txt-area" rows="6" cols="90" style="resize: none;" id="`+"right_q"+i+`" name="`+"right_q"+i+`"
+                            placeholder="Правильный ответ" required></textarea>
+                        </div> `)
+    }
+    else {
+        let type_qq=document.getElementById(i).value;
+            console.log(divgg)
+            let j=divgg.childElementCount-1;
+            console.log(j)
+            divgg.insertAdjacentHTML('beforeend',`<div class="str">  
+                            <p class="mar-top"> Правильный ответ надо отметить: </p>
+                            <button id="`+"add_var"+i+`" class="btn btn_var" type="button" onclick="add_var('`+i+`');">Добавить вариант ответа</button>
+                        </div>`)
+            for (let j = 0; j < 2; j++) {
+            divgg.insertAdjacentHTML('beforeend',`
+                        <div id="`+i+"answ"+j+`">
+                        <input type="`+type_qq+`" name="`+"right_q"+i+`" autocomplete="off">
+                        <input class="form-p form-log inp-redact inp-otv" name="`+"variants"+i+`" autocomplete="off" placeholder="Текст варианта ответа">
+                        <button class="btn btn_redact-del" type="button" onclick="getElementById('`+i+"answ"+j+`').remove()">Удалить</button>
+                        </div>`)
+                    }
+
+    } 
+}
+        function locate() {
+            console.log((document.location.pathname).includes('/menuprep/'))
+        if((document.location.pathname).includes('/menuprep/')) {
+                location='/menuprep/DisciplineMenu?disc_id='+new URLSearchParams(window.location.search).get('disc_id')
+        }
+        else {
+            location='/menuadmin/RedactDiscipline/choicetest?disc_id='+new URLSearchParams(window.location.search).get('disc_id')
+        }
+        }
+    function Prov () {
+        var sel=document.querySelectorAll('select')
+        var booll=[false,false,false];
+        var n=0;
+        for (var select of sel){
+            console.log("id");
+            console.log(select.id);
+            var id = document.getElementsByName("right_q"+select.id)
+            if (select.value=="checkbox"||select.value=="radio"){
+                var inp=document.getElementsByName("variants"+select.id)
+                let values = Array.prototype.map.call(inp, ({ value }) => value.replace(/\s+/g, ' ').trim())
+                if (new Set(values).size !== values.length)
+                {
+                    booll[2]=true
+                    break;
+                }
+            console.log('inp',values)
+                var varr= document.getElementsByName("variants"+select.id)
+                console.log(id);
+                var r=0
+                var leng=id.length
+                for(var i = 0; i < id.length; i++){
+                    if (!(id[i].checked)){
+                        console.log('kttktkt')
+                        id[i].setAttribute('value',varr[i].value)
+                        r+=1
+                    }
+                    else {
+                        id[i].setAttribute('value',varr[i].value)
+                }
+                }
+                if (r==id.length){
+                    booll[0]=true;
+                    break;
+                }
+            }
+            else {
+                n=id[0].value.replace(/\s+/g, ' ').trim().toLowerCase();
+                console.log('n,n.split(',').every(em=>String(em))',n,n.split(',').every(em=>String(em)))
+                if (!n.split(',').every(em=>String(em)))
+            {
+                booll[1]=true;
+                break;
+            }
+            }
+        }
+        console.log(booll)
+        if ( booll[1]==true) {
+        alert("Неправильный ввод данных: '"+ n+"'");
+        return false;
+        }
+        if ( booll[0]==true) {
+        alert("Не выбран правильный ответ");
+        return false;
+        }
+        if ( booll[2]==true) {
+        alert("Повтор вариантов ответов");
+        return false;
+        }
+        else {
+            return true;
+        }
+    }
+function add_var(i) {
+            let divgg =document.getElementById('block'+i);
+            console.log(divgg)
+            let j=divgg.childElementCount-1;
+            console.log(j)
+            let type_qq=document.getElementById(i).value;
+            divgg.insertAdjacentHTML('beforeend',`
+                        <div id="`+i+"answ"+j+`">
+                        <input type="`+type_qq+`" name="`+"right_q"+i+`" autocomplete="off">
+                        <input class="form-p form-log inp-redact inp-otv" name="`+"variants"+i+`" autocomplete="off" placeholder="Текст варианта ответа">
+                        <button class="btn btn_redact-del" type="button" onclick="getElementById('`+i+"answ"+j+`').remove()">Удалить</button>
+                        </div>`)
+                    }
+function addZadan() {
+    var d1 = document.getElementById("gg");
+    let i=document.getElementsByTagName('fieldset').length
+    document.getElementById("Zadan"+i);
+    while (document.getElementById("Zadan"+i) != null) {//проверка, что нет уже в списке такого задания с id
+        i+=1;
+    }
+    d1.insertAdjacentHTML('beforeend',`
+    <fieldset class="fieldset-style" id="Zadan`+i+`" name= "Zadan`+i+`">
+                        <div class="name-zad"><p> Название задания: </p>
+                        <input class="form-p form-log inp-redact inp-name" id="name_q`+i+`" name="name_q`+i+`" placeholder="Название задания" minlength="1" autocomplete="off">
+                        </div>
+                        <div> Текст задания:</div>
+                        <textarea class="txt-area" rows="15" cols="90" style="resize: none;" id="text_q`+i+`" name="text_q`+i+`"
+                            placeholder="Текст задания" minlength="1" required></textarea>
+                        <div class="str"> 
+                            <p class="boll"> Балл за ответ:</p> 
+                            <input class="form-p form-log inp-redact inp-ball" id="point`+i+`" name="point`+i+`" placeholder="Балл" pattern="^[1-9]" autocomplete="off" required>
+                            <select class="select-style margin-right" id=`+i+` name="type_q`+i+`" onchange="selectvar(`+i+`);">
+                            <option value="text">Текстовая форма ответа</option>
+                            <option value="radio">Выбор одного ответа</option>
+                            <option value="checkbox">Выбор нескольких ответов</option>
+                            </select>
+                        </div>  
+                        <block id="block`+i+`">
+                            <div> Введите правильный ответ: </div>
+                        <div>
+                        <textarea class="txt-area" rows="6" cols="90" style="resize: none;" id="right_q`+i+`" name="right_q`+i+`" cols="80" rows="5" 
+                            placeholder="Правильный ответ" required></textarea>
+                        </div>
+                        </block>
+                        <button class="btn btn_redact-del" type="button" onclick="getElementById('Zadan`+i+`').remove()">Удалить задание</button>
+                    </fieldset>`)
+}
+</script>
+</body>
+</html>

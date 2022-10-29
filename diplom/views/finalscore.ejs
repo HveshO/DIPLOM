@@ -1,0 +1,194 @@
+<!DOCTYPE html5>
+<html>
+    <head>
+        <!-- <link rel="stylesheet" href="vhod.css"> -->
+        <link rel="stylesheet" href="/style.css">
+    </head>
+    <style>
+        .linebreak{
+             /* word-break: break-word;   */
+            white-space: pre-line;
+}
+    </style>
+    <body>
+        <!-- 1. запись в саму таблицу, изменить кнопку, добавить проверку  -->
+    <div class="registration-cssave">
+        <form class="form-main" acton="/menuprep/RedactStudents" method="post">
+        <div class="mmenu">
+            <button class="btn btn_mm" type="button" onclick="location='/vihod'">Выйти</button>
+            <button  class="btn btn_mm margin-f" type="button" onclick="download('<%= type %>');">Экспорт в файл .txt</button>
+            <!-- <button id='upload' class="btn" type="button" onclick="update();">Импорт данных из файла</button> -->
+            <!-- <input type="file" name="inputfile" id="inputfile"> -->
+            <!-- class="btn" type="submit" -->
+            <button  class="btn btn_mm" type="submit" onclick="return Prov()"> Сохранить изменения</button>
+            <button class="btn btn_mm margin-f" type="button" onclick="locate()">Вернуться назад</button>
+        </div>
+            <div class="form-group PA-cont">
+                <% if (t!=undefined){ %>
+                    <div class="form-field warningtext form-field-invalid">
+                        <div class="error"> <%= t %></div>
+                    </div>
+                    <% } %>
+                <table class="tb_prev tr__border table-txt" id="preview" >
+                    <tr>
+                    <% for(var i = 0; i < zagol.length; i++) { %>
+                    <th class="form-tb linebreak"><%= zagol[i] %></th>
+                    <% } %>
+                    </tr>
+                    <% for(var i = 0; i < json.length; i++) { %>
+                        <tr id="<%= i %>">
+                            <% for(var j = 1; j < Object.keys(json[i]).length; j++) { %>
+                                <% if (type[j]=='text'||type[j]=='max_text') { %>
+                                    <td>
+                                        <div class="<%= type[j] %> linebreak"><%= json[i][Object.keys(json[i])[j]] %></div>
+                                        <!-- name='<%= json[i].users_id %>'  -->
+                                    </td>
+                                    <% }else{ if (type[j]=='number_array_change') { %>
+                                        <td>
+                                            <input class='number_array_change form-tb num-size' name="<%= json[i][Object.keys(json[i])[0]] %>" autocomplete="off" value='<%= json[i][Object.keys(json[i])[j]] %>' pattern="^[0-9,]*" required>
+                                        </td>
+                                   <%  }if (type[j]=='number_change') { %>
+                                        <td>
+                                            <input name="<%= json[i][Object.keys(json[i])[0]] %>" class="number_change form-tb num-size"
+                                            value='<%= json[i][Object.keys(json[i])[j]] %>' type="number" min="0" max="9" autocomplete="off" required>
+                                        </td>
+                            <% } if (type[j]=='Poputka') { %>
+                                <td>
+                                    <input name="<%= json[i][Object.keys(json[i])[0]] %>" class="form-tb num-size"
+                                    value='<%= json[i][Object.keys(json[i])[j]] %>' type="number" min="0" max="901" autocomplete="off" required>
+                                </td>
+                    <% } }} %>
+                        </tr>
+                        <% } %>
+                    </tr>
+                </table>
+            </div>
+    </div>
+    </form>
+    <script>
+        function locate() {
+            location='/menuprep/DisciplineMenu?disc_id='+new URLSearchParams(window.location.search).get('disc_id')
+        }
+function equalArrays(a,b) {
+  if (a.length != b.length) return false; // Мас­си­вы раз­ной дли­ны не рав­ны
+
+ for(var i = 0; i < a.length; i++) // Цикл по всем эле­мен­там
+   if (a[i] !== b[i]) return false; // Ес­ли хоть один эле­мент от­ли­ча­ет­ся, мас­си­вы не рав­ны
+
+ return true; // Ина­че они рав­ны
+}
+function Prov () {
+    var l=[]
+    let t=0;
+    var srav=document.querySelectorAll('.max_text')
+    var srav2=document.querySelectorAll('.number_change')
+    for (var i = 0; i < srav.length; i++){
+        console.log(srav2[i].value,srav[i].innerHTML)
+        if (Number(srav2[i].value)>Number(srav[i].innerHTML))
+        {
+            t=5
+            break;
+        }
+    }
+    var is=document.querySelectorAll('.number_array_change')
+        console.log(is)
+        console.log(is[0])
+        //matched = is.filter( el => two.indexOf( el.innerHTML ) > -1 );
+        for (var r of is){
+                r=r.value.replace(/\s+/g, ' ').trim().toLowerCase().split(',');
+                console.log(r[0],r[1],r[2])
+                // console.log(r[0]>=r[1],Number(r[1])>=Number(r[2]),r[0]>=r[2])
+            if (Number(r[0])>=Number(r[1]) || Number(r[1])>=Number(r[2])||Number(r[0])>=Number(r[2])){
+                t=1;
+                break;
+            }
+            else if (r.length!=3){
+                t=2;
+                break;
+            }
+            else if (r[0]<=0 ||r[2]>=100){
+                t=3;
+                break;
+            }
+            else if (new Set(r).size !== r.length){
+                t=4;
+                break;
+            }
+        }
+        r=String(r)
+        if (t==5) {
+            alert("Балл должен не превышать максимального: '"+srav2[i].value+"'")
+            return false
+        }
+        if (t==1) {
+            alert("Разделение по числам должно быть по возрастанию: '"+r+"'")
+            return false
+        }
+        else if (t==2) {
+            alert("Должно быть 3 числа: '"+r+"'")
+            return false
+        }
+        else if (t==3) {
+            alert("Разделение должно быть в диапазоне (0;100): '"+r+"'")
+            return false
+        }
+        else if (t==4) {
+            alert("Числа не должны повторяться: '"+r+"'")
+            return false
+        }
+        else {return true}
+    }
+function update(type) {
+// document.getElementById('inputfile').removeEventListener('change',t)
+document.getElementById('inputfile').addEventListener('change', function t() {
+			var fr = new FileReader();
+			fr.onload = function() {
+                var data=fr.result;
+				//  document.getElementById('output')
+				//  	.textContent = fr.result
+                console.log(data)
+                renderTable(data,type);
+
+			}
+        try{
+			fr.readAsText(this.files[0]);
+        }
+        catch {
+            console.log("Файл не был загружен")
+        }
+		})
+console.log(document.getElementById('inputfile'))
+    }
+function download(type) {
+    type=type.split(',')
+            var rowsl = document.getElementsByTagName("table")[0].rows.length
+            console.log(rowsl)
+            var colsl = document.getElementsByTagName("table")[0].rows[0].cells.length
+            console.log(colsl);
+            var r=[];
+            for(let i = 0; i < rowsl; i++) {
+                for(let j = 0; j < colsl; j++) {
+                    if (i==0){
+                        console.log(type[j+1])
+                    cell_value = document.getElementsByTagName("table")[0].rows[i].cells[j].textContent.replace(/\s+/g, ' ').trim()}
+                    else{
+                        console.log(type[j+1])
+                        if (type[j+1]=='text')
+                        {cell_value=document.getElementsByTagName("table")[0].rows[i].cells[j].querySelector('div').textContent.replace(/\s+/g, ' ').trim()}
+                        else {cell_value=document.getElementsByTagName("table")[0].rows[i].cells[j].querySelector('input').value.replace(/\s+/g, ' ').trim()}}
+                    console.log(cell_value)
+                    if (j!=colsl-1) {
+                    r+=cell_value + ';'}
+                    else {r+=cell_value + '\n'}
+
+                }
+            }
+            let a = document.createElement("a");
+            let file = new Blob([r], {type: 'text/txt; charset=windows-1251'});
+            a.href = URL.createObjectURL(file);
+            a.download = "example.txt";
+            a.click();
+        }
+</script>
+</body>
+</html>

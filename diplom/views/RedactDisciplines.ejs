@@ -1,0 +1,156 @@
+<!DOCTYPE html5>
+<html>
+    <head>
+        <link rel="stylesheet" href="/style.css">
+    </head>
+    <body>
+        <!-- 1. запись в саму таблицу, изменить кнопку, добавить проверку  -->
+    <div class="registration-cssave">
+        <form class="form-main" method="post">
+                <div class="mmenu">
+            <button class="btn btn_mm margin-f" type="button" onclick="location='/vihod'">Выйти</button>
+            <button class="btn btn_mm" type="button" onclick="location='/menuadmin'">Вернуться в меню</button>
+            <!-- <button  class="btn" type="button" onclick="download();">Экспорт данных в файл</button>
+            <button id='upload' class="btn" type="button" onclick="update();">Импорт данных из файла</button>
+            <input id="inputfile" type="file" class="custom-file-input" accept=".csv" onclick="update('<%= type %>');"/> -->
+            <!-- <input type="file" name="inputfile" id="inputfile"> -->
+            <button class="btn btn_mm margin-f" type="submit" onclick="return Prov()"> Сохранить изменения</button>
+            <button  class="btn btn_mm" type="button" onclick="AddRow('<%= type %>');">Добавить строку</button>
+            <!-- <button class="btn" type="submit" onclick="return Prov()"> Отравить логин и пароль на почту выбранным пользователям</button>  -->
+        </div>
+            <div class="form-group PA-cont">
+                <% if (t!=undefined){ %>
+                    <div class="form-field warningtext form-field-invalid">
+                        <div class="error"> <%= t %></div>
+                    </div>
+                    <% } %>
+                <table class="tb_prev" id="preview">
+                    <tr>
+                    <% for(var i = 0; i < zagol.length; i++) { %>
+                    <th><%= zagol[i] %></th>
+                    <% } %>
+                    </tr>
+                    <% for(var i = 0; i < json.length; i++) { %>
+                        <tr id="<%= json[i][Object.keys(json[i])[0]] %>">
+                                        <td>
+                                            <input name="<%= json[i][Object.keys(json[i])[0]] %>" class="notnull <%= type[0] %> form-tb disc-size"
+                                             value='<%= json[i][Object.keys(json[i])[1]] %>'  
+                                             minlength="1" maxlength="50"  pattern="([A-Za-zА-Яа-яЁё0-9/,:]{1,}?([A-Za-zА-Яа-яЁё0-9/,: ]*$|$))" title="Английские или русские символы,цифры,/,:, пробелы от 1 до 50" autocomplete="off" required>
+                                        </td>
+                                        <!-- <td>
+                                            <input name="<%= json[i][Object.keys(json[i])[0]] %>" class="<%= type[1] %>"
+                                             value='<%= json[i][Object.keys(json[i])[2]] %>' min="0" max="900000000000000000" type="number"  autocomplete="off" size="4" required>
+                                        </td>
+                                        <td>
+                                            <input name="<%= json[i][Object.keys(json[i])[0]] %>" class="<%= type[2] %>"
+                                             value='<%= json[i][Object.keys(json[i])[3]] %>' min="0" max="900000000000000000" type="number" autocomplete="off" size="4" required>
+                                        </td>
+                                        <td>
+                                            <input name="<%= json[i][Object.keys(json[i])[0]] %>" class="<%= type[3] %>" pattern="^[ 0-9,]+$"
+                                              minlength="1" value='<%= json[i][Object.keys(json[i])[4]] %>' size="10" autocomplete="off" maxlength="50">
+                                        </td> -->
+                            <td><button class="btn btn_del" type="button" style="white-space: nowrap;" onclick="getElementById('<%= json[i][Object.keys(json[i])[0]] %>').remove();">Удалить строку</button>
+                                <button class="btn btn_del" type="button" onclick="location='/menuadmin/RedactDiscipline/choicetest?disc_id=<%= json[i][Object.keys(json[i])[0]] %>'">Изменить тесты</button>
+                                <button class="btn btn_del" type="button" onclick="location='/menuadmin/RedactDiscipline/access?disc_id=<%= json[i][Object.keys(json[i])[0]] %>'">Доступ преподавателям</button>
+                            </td>
+                        </tr>
+                        <% } %>
+                    </tr>
+                </table>
+            </div>
+    </form>
+    <br>
+</div>
+    <script>
+function AddRow(type) {
+    type=type.split(',')
+    console.log(type)
+    //    let d1 = document.getElementById("preview");
+    let d1 = document.querySelector("tbody");
+    let rowsl = document.getElementsByTagName("table")[0].rows.length;
+    let i= Number(document.getElementsByTagName("table")[0].rows[rowsl-1].id)+1;
+    while (document.getElementById(i) != null) {//проверка, что нет уже в списке такого задания с id
+        i+=1;
+    }
+    d1.insertAdjacentHTML('beforeend', `<tr id="`+ i+`">`)
+    d1.lastChild.insertAdjacentHTML('beforeend', `
+                                        <td>
+                                            <input name="`+i+`" class="notnull `+type[0]+` form-tb disc-size"
+                                         minlength="1" maxlength="50" pattern="([A-Za-zА-Яа-яЁё0-9/,:]{1,}?([A-Za-zА-Яа-яЁё0-9/,: ]*$|$))" 
+                                         title="Английские или русские символы,цифры,/,:, пробелы от 1 до 50" autocomplete="off" required>
+                                        </td>
+                                        <td><button class="btn btn_del" type="button" style="white-space: nowrap;" onclick="getElementById('`+i+`').remove();">Удалить строку</button>
+                                 </td>
+                                `);
+                                // <td>
+                                //             <input name="`+i+`" class="`+type[1]+`"
+                                //               min="0" max="900000000000000000" type="number"  size="4" autocomplete="off" required>
+                                //         </td>
+                                //         <td>
+                                //             <input name="`+i+`" class="`+type[2]+`"
+                                //          min="0" max="900000000000000000" type="number" size="4" autocomplete="off"required>
+                                //         </td>
+                                //         <td>
+                                //             <input name="`+i+`" class="`+type[3]+`" pattern="^[ 0-9,]+$"
+                                //               minlength="1" size="10" autocomplete="off" maxlength="50">
+                                //         </td>
+                                //         <td><button type="button" style="white-space: nowrap;" onclick="getElementById('`+i+`').remove();">Удалить строку</button>
+                                // </td>
+    }
+function Prov () {
+        var is=document.querySelectorAll('input')
+        console.log(is)
+        console.log(is[0])
+        //matched = is.filter( el => two.indexOf( el.innerHTML ) > -1 );
+        var l=[]
+        let t=false;
+        let s=false;
+        for (var r of is){
+            var n=r.value.replace(/\s+/g, ' ').trim().toLowerCase();
+            if (r.classList[0]=='number_array'&&n!=''){
+            console.log('r.classList[0]==number_array',n)
+            if (!n.split(',').every(em=>Number(em)))
+            {
+                s=true;
+                break;
+
+            }
+            console.log(n)
+
+        }
+            if (r.classList[0]!="number"&&r.classList[0]!="number_array"&&r.type!="file"&&r.classList[0]!="roles" && r.type!='checkbox'){
+                console.log(n)
+                if (l.includes(n))
+                {
+                    t=true;
+                    break;
+                }
+                console.log(r.classList[0],n.length,r.classList[0]=="notnull" && n.length<1)
+                if (r.classList[0]=="notnull" && n=='')
+                {
+                    t=true;
+                    break;
+                }
+                l.push(n)
+            console.log('l,t,r',l,t,n)}
+        }
+        console.log("r.classList[0]",r.classList[0])
+        if (s)
+            {
+                alert("Неверный ввод данных: '"+n+"'")
+            }
+        else if (t) {
+            if (n=='')
+            {
+                alert("Данные не могут содержать просто пробелы")
+            }
+            else{
+            alert("Данные не могут повторяться: '"+n+"'")}
+            return false;
+        }
+        else {
+            return true;}
+        }
+</script>
+</body>
+</html>

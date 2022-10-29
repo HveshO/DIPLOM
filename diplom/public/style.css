@@ -1,0 +1,530 @@
+ /* GLOBAL */
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;700&display=swap%27');
+* {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    margin: 0;
+
+  
+}
+
+html {
+    background: #ffffff;
+    color: #000000;
+    font: 14px/1.6 "Comfortaa";
+    font-weight: 400;
+}
+
+img {
+    max-width: 100%;
+    vertical-align: middle;
+}
+
+a {
+    text-decoration: none;
+    color: #ffffff;
+}
+
+ul {
+    padding: 0;
+}
+
+li {
+    list-style-type: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-size: 25px;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin: 0;
+    color: #000000;
+    line-height: 1.5;
+}
+
+.clr::after {
+    clear: both;
+    content: "";
+    display: block;
+}
+
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+/* ssss */
+.container-welcome {
+  width: 250px;
+  margin: 0 auto;
+  margin-top: 35vh;
+  border-radius: 4px;
+  border: 1px solid #9E9748;
+  
+} 
+
+.choice {
+  margin: 10px 0 20px 25px;
+}
+.enter-txt {
+  width: 170px;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin: 0 auto;
+  line-height: 3.5em;
+
+  margin: 10px 0 0 25px;
+}
+  .auto form {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    max-width: 400px;
+    align-items: center;
+  }
+ 
+  .btn {
+    border: none;
+    background: none;
+    cursor: pointer;
+    
+    
+  }
+.enter-account {
+  border: 1px solid #9E9748;
+  border-radius: 4px;
+  height: 30px;
+  padding: 0 20px 0 20px;
+  font-size: 1.2em;
+}
+.create-account {
+  border-bottom: 1px solid #3f74dd;
+  padding: 0;
+  color: #3f74dd;
+  font-size: .9em;
+  opacity: 0.6;
+}
+.create-account:hover {
+  opacity: 1;
+  transition: 0.3s;
+}
+ .enter-account:hover {
+  background: #9E9748;
+  color: #fff;
+  transition: background 0.3s ease-in-out, color 0.3s ease-in-out;
+ }
+
+.inp {
+  margin-bottom: 10px;
+}
+
+.form-p {
+  border-radius: 4px;
+  border: 1px solid #9E9748;
+  height: 30px;
+}
+.form-p:focus {
+  border: 1px solid #9E9748;
+  outline: none;
+}
+.form-p::placeholder {
+  padding-left: 5px;
+  opacity: 0.5;
+}
+  
+  
+.cont__lable {
+  margin-left: 30px;
+  width: 175px;
+  
+}
+.choice__cont {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 15px;
+  margin-top: 10px;
+
+}
+
+.btn__ok {
+  width: 140px;
+  border: none;
+  background: none;
+
+  border: 1px solid #9E9748;
+  border-radius: 4px;
+  height: 30px;
+  padding: 0 20px 0 20px;
+  font-size: 1.2em;
+}
+
+.btn__ok:hover {
+
+    background: #9E9748;
+    color: #fff;
+    transition: background 0.3s ease-in-out, color 0.3s ease-in-out;
+
+}
+
+/* regist */
+
+
+.form-gruop__contaner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.sel-gr select {
+  border: none;
+  outline: none;
+}
+.sel-gr option {
+  border-radius: 4px;
+
+}
+.sel-gr {
+  height: 50px;
+}
+.numb-gr {
+  
+  width: 170px;
+}
+.btn-reg {
+  border: 1px solid #9E9748;
+    border-radius: 4px;
+    height: 30px;
+    padding: 0 20px 0 20px;
+    font-size: 1.2em;
+    margin-bottom: 15px;
+}
+.btn-reg:hover {
+  background: #9E9748;
+  color: #fff;
+  transition: background 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.margin-fix {
+  margin-top: 25vh;
+}
+.button {
+  display: flex;
+  justify-content: center;
+}
+
+/* PrepDescipline */
+
+.registration-cssave {
+  margin-top: 20px;
+}
+.admin {
+  
+  border: none; 
+}
+.mmenu {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  
+  padding: 15px 0 15px 0;
+  width: 155px;
+  margin-right: 10px;
+
+  border: 1px solid #9E9748;
+  border-radius: 4px;
+}
+
+.form-main {
+  display: flex;
+  justify-content: center;
+}
+.tb_prev {
+  border: 1px solid #9E9748;
+  border-radius: 4px;
+  padding: 15px 0 15px 0;
+}
+
+th {
+  font-size: 14px;
+}
+
+.text-aling__center {
+  text-align: center;
+}
+.padding__add {
+  padding: 0 10px 8px 10px;
+}
+.btn_mm {
+  border-top: 1px solid #9E9748;
+  border-bottom: 1px solid #9E9748;
+  width: 154px;
+  
+}
+
+.btn_mm:hover {
+  background: #9E9748;
+    color: #fff;
+    transition: background 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.margin-f {
+  margin: 5px 0 5px 0;
+}
+
+/* PersonalArea */
+
+.personalArea-container {
+  display: flex;
+  justify-content: center;
+}
+
+.PA-cont {
+  border: 1px solid #9E9748;
+  border-radius: 4px;
+  padding: 15px;
+}
+.padding {
+  padding: 20px;
+}
+.main-inf {
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.item {
+  height: 20px;
+}
+.btn_save {
+  border: 1px solid #9E9748;
+  border-radius: 4px;
+  margin-top: 10px;
+}
+
+.left-side {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.tb_prev__padding {
+  padding: 15px;
+}
+
+/* Students */
+
+
+
+.form-tb {
+  border: none;
+  text-align: start;
+}
+.num-size {
+  max-width: 120px;
+}
+.fio-size {
+  max-width: 180px;
+}
+.email-size {
+  max-width: 160px;
+}
+.disc-size {
+  width: 250px;
+}
+.btn_del {
+  font-size: .7em;
+  border: 1px solid #9E9748;
+}
+
+.tr__border tr {
+  border: 1px solid #9E9748;
+}
+
+.table-txt {
+  font-size: 14px;
+}
+
+
+/* RedactTest */
+
+.h-style {
+  font-size: 20px;
+}
+
+.name-zad {
+  display: flex;
+    margin-right: 10px;
+}
+.name-zad p {
+    font-weight: bold;
+    font-size: 16px;
+    margin-right: 10px;
+}
+
+.redact-test {
+  margin: 0 auto;
+  width: 600px;
+}
+
+.fieldset-style {
+  border: 1px solid #9E9748;
+  border-radius: 4px;
+  margin-bottom: 15px;
+}
+.welcome {
+  margin: 15px 0 15px 0 ;
+}
+
+.btn_test {
+  border: 1px solid #9E9748;
+  margin-bottom: 30px;
+}
+
+.inp-redact {
+  height: 22px;
+}
+
+.inp-otv {
+  width: calc(100% - 90px);
+  
+}
+
+.btn_redact-del {
+  border: 1px solid #9E9748;
+  border-radius: 4px;
+  height: 22px;
+  margin-top: 10px;
+}
+
+.inp-ball {
+  width: 60px; 
+}
+
+.str {
+  display: flex;
+  margin-top: 10px;
+}
+
+.boll {
+  margin-right: 10px;
+}
+
+.btn_var {
+  border: 1px solid #9E9748;
+  border-radius: 4px;
+  margin-left: 10px;
+}
+.inp-name {
+  width: calc(100% - 200px);
+}
+
+.txt-area {
+  border: 1px solid #9E9748;
+  border-radius: 4px;
+}
+
+.mar-top {
+  margin-top: 5px;
+  margin-bottom: -5px;
+}
+
+/* Всплывающий список */
+
+.select-style {
+  border: 1px solid #9E9748;
+  border-radius: 4px;
+  height: 22px;
+}
+
+.margin-right {
+  margin-left: 10px;  
+}
+
+/* text */
+
+.text-welcome {
+  padding: 20px;
+}
+
+.main-info__small {
+  font-size: 14px;
+}
+.main-inf__half {
+  font-size: 16px;
+}
+.quest-txt {
+  font-size: 16px;
+}
+
+
+
+
+
+
+
+
+
+
+
+.error {
+  color:red;
+    font-size:.7em;
+}
+
+  .warningtext{
+    color:red;
+    margin-top: -14px;
+    margin-left: 15px;
+   
+  }
+    
+    .correct {
+      border: 2px solid green;
+    }
+    .incorrect {
+      border: 2px solid red;
+    }
+    .maycorrect {
+      border: 2px solid yellow;
+    }
+    .invisible 
+    { opacity: 0;}
+    .myButton {
+      position: absolute;
+      top: 0;
+      right: 0;
+  }
+  .custom-file-input::-webkit-file-upload-button {
+    visibility: hidden;
+     /* display: none; */
+    content: none; 
+  }
+  .custom-file-input::before {
+    display: inline-block; 
+    content: '   Импорт из файла .txt  ';
+    align-items: center;
+    align-content: center;
+    text-align:center;
+    justify-content: center;
+    background: none; 
+    border: none;
+     width:auto; 
+    cursor: pointer;
+  }
+  
+  /* ЗАГОЛОВОК data-students */
+  .data-student{
+    display: flex;
+    
+  }
+  .linebreak{
+    /* word-break: break-word;   */
+   white-space: pre-line;
+}
+.text1{
+  /* word-break: break-word;   */
+  font-size: 10px;
+}

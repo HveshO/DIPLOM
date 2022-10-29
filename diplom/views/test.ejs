@@ -1,0 +1,59 @@
+<!DOCTYPE html5>
+<html>
+    <head>
+        <link rel="stylesheet" href="/style.css">
+    </head>
+    <body>
+    <div class="text-welcome">
+        <form class="form-main" acton="/menu/ChoiceTest/ekzamen" method="post">
+            <div class="mmenu">
+            <button class="btn btn_mm margin-f" type="button" onclick="location='/vihod'">Выйти</button>
+            <button  class="btn btn_mm" type="button" onclick="locate()">Вернуться назад</button>
+            </div>
+            <div class="form-group PA-cont" id='gg'>
+                <p class="main-inf"><%= name_d %></p> 
+            <% if (msg=='') {%>
+                <% for (let i = 0; i < Object.keys(json).length; i++) { %>
+                    <fieldset class="fieldset-style" id=<%= "Zadan"+i %> name=<%= "Zadan"+i %>>
+                        <p class="main-inf main-inf__half"> <%=json[i].name_q %></p>
+                        <div class="linebreak"> <p class="quest-txt"> <%=json[i].text_q %> </p></div>
+                        <!-- <div> Балл за ответ: <%=json[i].point %></div> -->
+                        <% if (json[i].type_q=="text") { %>
+                        <div>Введите правильный ответ:</div>
+                        <textarea class="txt-area" rows="5" cols="140" style="resize: none;" id=<%= json[i].table_id %> name=<%= json[i].table_id %> cols="80" rows="5" 
+                            placeholder="Правильный ответ" 
+                             value='<%= json[i].text_q %>' autocomplete="off" required></textarea>
+                        <% } else { %>
+                        <div>Правильный ответ надо отметить:</div>
+                        <% } for (let j = 0; j < json[i].variants.length; j++)  { if (json[i].type_q=="radio") { %>
+                        <div id=<%= i+"answ"+j %>>
+                        <label>
+                        <input type="radio" name=<%= json[i].table_id %> value='<%=json[i].variants[j] %>'>
+                        <%=json[i].variants[j] %></label>
+                        </div>
+                        <% } %>
+                        <% if (json[i].type_q=="checkbox") { %>
+                        <div id=<%= i+"answ"+j %>>
+                        <label>
+                        <input type="checkbox" name=<%= json[i].table_id %>  value='<%=json[i].variants[j] %>'>
+                        <%=json[i].variants[j] %></label>
+                        </div>
+                        <% }; } %>
+                    </fieldset>
+                    <% }%>
+            
+            <!-- onclick="return Prov()" -->
+            <button class="btn btn_mm btn_test" type="submit">Проверить</button>
+            <%} else{ %>
+            <div><%= msg %> </div>
+            <%} %>
+        </div>
+    </form>
+    </div>
+<script>
+    function locate() {
+            location='/menu/ChoiceTest?disc_id='+new URLSearchParams(window.location.search).get('disc_id')
+        }
+</script>
+</body>
+</html>
